@@ -2,7 +2,7 @@ import { hash, compare } from "bcryptjs";
 import prisma from "../infra/prisma.ts";
 import createError from "@fastify/error";
 import { StatusCodes } from "http-status-codes";
-import { dispatchOrderCreated } from "../broker/messages/send-register-notification.ts";
+import { dispatchRegistrationNotification } from "../broker/messages/send-register-notification.ts";
 const UserExists = createError(
   "USER_EXISTS",
   "User already exists",
@@ -45,8 +45,6 @@ export class PrismaAuthService {
       },
     });
 
-    dispatchOrderCreated({ email, name });
-
     return !!user;
   }
 
@@ -63,6 +61,18 @@ export class PrismaAuthService {
   private async findUserByEmail(email: string) {
     return prisma.user.findUnique({
       where: { email },
+    });
+  }
+  async verifyEmail(email: string) {
+    const user = await this.findUserByEmail(email);
+    if (!user) throw new UserNotFound();
+
+    if (user.isEmailVerified) {
+      throw new Error("Email already verified");
+    }
+    await prisma.user.update({
+      where: { email },
+      data: { isEmailVerified: true },
     });
   }
 }

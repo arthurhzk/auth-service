@@ -24,12 +24,14 @@
     "fastify": "5.3.3",
     "fastify-type-provider-zod": "4.0.2",
     "http-status-codes": "^2.3.0",
+    "jsonwebtoken": "^9.0.2",
     "pg": "8.16.0",
     "zod": "3.25.50"
   },
   "devDependencies": {
     "@tsconfig/node22": "22.0.2",
     "@types/amqplib": "0.10.7",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "22.15.29",
     "prisma": "^6.9.0",
     "typescript": "5.8.3"
